@@ -11,7 +11,7 @@ from frappe.model.document import Document
 from frappe.utils import cint
 from frappe.utils.html_utils import clean_html
 
-from erpnext.stock.utils import check_pending_reposting
+from psmnext.stock.utils import check_pending_reposting
 
 
 class StockSettings(Document):
@@ -78,7 +78,7 @@ class StockSettings(Document):
 		]:
 			frappe.db.set_default(key, self.get(key, ""))
 
-		from erpnext.utilities.naming import set_by_naming_series
+		from psmnext.utilities.naming import set_by_naming_series
 
 		set_by_naming_series(
 			"Item",
@@ -154,7 +154,7 @@ class StockSettings(Document):
 		if int(self.clean_description_html or 0) and not int(self.db_get("clean_description_html") or 0):
 			# changed to text
 			frappe.enqueue(
-				"erpnext.stock.doctype.stock_settings.stock_settings.clean_all_descriptions",
+				"psmnext.stock.doctype.stock_settings.stock_settings.clean_all_descriptions",
 				now=frappe.flags.in_test,
 				enqueue_after_commit=True,
 			)

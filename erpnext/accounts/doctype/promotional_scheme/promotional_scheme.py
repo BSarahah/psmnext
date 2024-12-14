@@ -83,26 +83,26 @@ class PromotionalScheme(Document):
 	if TYPE_CHECKING:
 		from frappe.types import DF
 
-		from erpnext.accounts.doctype.campaign_item.campaign_item import CampaignItem
-		from erpnext.accounts.doctype.customer_group_item.customer_group_item import CustomerGroupItem
-		from erpnext.accounts.doctype.customer_item.customer_item import CustomerItem
-		from erpnext.accounts.doctype.pricing_rule_brand.pricing_rule_brand import PricingRuleBrand
-		from erpnext.accounts.doctype.pricing_rule_item_code.pricing_rule_item_code import (
+		from psmnext.accounts.doctype.campaign_item.campaign_item import CampaignItem
+		from psmnext.accounts.doctype.customer_group_item.customer_group_item import CustomerGroupItem
+		from psmnext.accounts.doctype.customer_item.customer_item import CustomerItem
+		from psmnext.accounts.doctype.pricing_rule_brand.pricing_rule_brand import PricingRuleBrand
+		from psmnext.accounts.doctype.pricing_rule_item_code.pricing_rule_item_code import (
 			PricingRuleItemCode,
 		)
-		from erpnext.accounts.doctype.pricing_rule_item_group.pricing_rule_item_group import (
+		from psmnext.accounts.doctype.pricing_rule_item_group.pricing_rule_item_group import (
 			PricingRuleItemGroup,
 		)
-		from erpnext.accounts.doctype.promotional_scheme_price_discount.promotional_scheme_price_discount import (
+		from psmnext.accounts.doctype.promotional_scheme_price_discount.promotional_scheme_price_discount import (
 			PromotionalSchemePriceDiscount,
 		)
-		from erpnext.accounts.doctype.promotional_scheme_product_discount.promotional_scheme_product_discount import (
+		from psmnext.accounts.doctype.promotional_scheme_product_discount.promotional_scheme_product_discount import (
 			PromotionalSchemeProductDiscount,
 		)
-		from erpnext.accounts.doctype.sales_partner_item.sales_partner_item import SalesPartnerItem
-		from erpnext.accounts.doctype.supplier_group_item.supplier_group_item import SupplierGroupItem
-		from erpnext.accounts.doctype.supplier_item.supplier_item import SupplierItem
-		from erpnext.accounts.doctype.territory_item.territory_item import TerritoryItem
+		from psmnext.accounts.doctype.sales_partner_item.sales_partner_item import SalesPartnerItem
+		from psmnext.accounts.doctype.supplier_group_item.supplier_group_item import SupplierGroupItem
+		from psmnext.accounts.doctype.supplier_item.supplier_item import SupplierItem
+		from psmnext.accounts.doctype.territory_item.territory_item import TerritoryItem
 
 		applicable_for: DF.Literal[
 			"",

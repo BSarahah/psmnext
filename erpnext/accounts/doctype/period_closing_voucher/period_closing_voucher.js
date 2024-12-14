@@ -22,7 +22,7 @@ frappe.ui.form.on("Period Closing Voucher", {
 	fiscal_year: function (frm) {
 		if (frm.doc.fiscal_year) {
 			frappe.call({
-				method: "erpnext.accounts.doctype.period_closing_voucher.period_closing_voucher.get_period_start_end_date",
+				method: "psmnext.accounts.doctype.period_closing_voucher.period_closing_voucher.get_period_start_end_date",
 				args: {
 					fiscal_year: frm.doc.fiscal_year,
 					company: frm.doc.company,

@@ -15,7 +15,7 @@ class JournalEntryTemplate(Document):
 	if TYPE_CHECKING:
 		from frappe.types import DF
 
-		from erpnext.accounts.doctype.journal_entry_template_account.journal_entry_template_account import (
+		from psmnext.accounts.doctype.journal_entry_template_account.journal_entry_template_account import (
 			JournalEntryTemplateAccount,
 		)
 

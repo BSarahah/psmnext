@@ -4,13 +4,13 @@
 
 import frappe
 
-from erpnext.accounts.doctype.account_closing_balance.account_closing_balance import (
+from psmnext.accounts.doctype.account_closing_balance.account_closing_balance import (
 	make_closing_entries,
 )
-from erpnext.accounts.doctype.accounting_dimension.accounting_dimension import (
+from psmnext.accounts.doctype.accounting_dimension.accounting_dimension import (
 	get_accounting_dimensions,
 )
-from erpnext.accounts.utils import get_fiscal_year
+from psmnext.accounts.utils import get_fiscal_year
 
 
 def execute():

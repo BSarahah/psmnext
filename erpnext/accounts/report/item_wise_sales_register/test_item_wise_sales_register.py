@@ -2,9 +2,9 @@ import frappe
 from frappe.tests.utils import FrappeTestCase
 from frappe.utils import getdate, today
 
-from erpnext.accounts.doctype.sales_invoice.test_sales_invoice import create_sales_invoice
-from erpnext.accounts.report.item_wise_sales_register.item_wise_sales_register import execute
-from erpnext.accounts.test.accounts_mixin import AccountsTestMixin
+from psmnext.accounts.doctype.sales_invoice.test_sales_invoice import create_sales_invoice
+from psmnext.accounts.report.item_wise_sales_register.item_wise_sales_register import execute
+from psmnext.accounts.test.accounts_mixin import AccountsTestMixin
 
 
 class TestItemWiseSalesRegister(AccountsTestMixin, FrappeTestCase):

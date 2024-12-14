@@ -1,6 +1,6 @@
 import frappe
 
-from erpnext.utilities.naming import set_by_naming_series
+from psmnext.utilities.naming import set_by_naming_series
 
 
 def execute():

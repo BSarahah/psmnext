@@ -8,11 +8,11 @@ import frappe
 from frappe.tests.utils import FrappeTestCase, change_settings
 from frappe.utils import add_days, cint, flt, nowtime, today
 
-import erpnext
-from erpnext.accounts.doctype.account.test_account import get_inventory_account
-from erpnext.accounts.utils import get_company_default
-from erpnext.controllers.sales_and_purchase_return import make_return_doc
-from erpnext.controllers.tests.test_subcontracting_controller import (
+import psmnext
+from psmnext.accounts.doctype.account.test_account import get_inventory_account
+from psmnext.accounts.utils import get_company_default
+from psmnext.controllers.sales_and_purchase_return import make_return_doc
+from psmnext.controllers.tests.test_subcontracting_controller import (
 	get_rm_items,
 	get_subcontracting_order,
 	make_bom_for_subcontracted_items,
@@ -24,18 +24,18 @@ from erpnext.controllers.tests.test_subcontracting_controller import (
 	make_subcontracted_items,
 	set_backflush_based_on,
 )
-from erpnext.manufacturing.doctype.production_plan.test_production_plan import make_bom
-from erpnext.stock.doctype.item.test_item import make_item
-from erpnext.stock.doctype.purchase_receipt.test_purchase_receipt import get_gl_entries
-from erpnext.stock.doctype.serial_and_batch_bundle.test_serial_and_batch_bundle import (
+from psmnext.manufacturing.doctype.production_plan.test_production_plan import make_bom
+from psmnext.stock.doctype.item.test_item import make_item
+from psmnext.stock.doctype.purchase_receipt.test_purchase_receipt import get_gl_entries
+from psmnext.stock.doctype.serial_and_batch_bundle.test_serial_and_batch_bundle import (
 	get_batch_from_bundle,
 	make_serial_batch_bundle,
 )
-from erpnext.stock.doctype.stock_entry.test_stock_entry import make_stock_entry
-from erpnext.stock.doctype.stock_reconciliation.test_stock_reconciliation import (
+from psmnext.stock.doctype.stock_entry.test_stock_entry import make_stock_entry
+from psmnext.stock.doctype.stock_reconciliation.test_stock_reconciliation import (
 	create_stock_reconciliation,
 )
-from erpnext.subcontracting.doctype.subcontracting_order.subcontracting_order import (
+from psmnext.subcontracting.doctype.subcontracting_order.subcontracting_order import (
 	make_subcontracting_receipt,
 )
 
@@ -129,7 +129,7 @@ class TestSubcontractingReceipt(FrappeTestCase):
 		scr.submit()
 
 	def test_subcontracting_gle_fg_item_rate_zero(self):
-		from erpnext.stock.doctype.purchase_receipt.test_purchase_receipt import get_gl_entries
+		from psmnext.stock.doctype.purchase_receipt.test_purchase_receipt import get_gl_entries
 
 		set_backflush_based_on("BOM")
 		make_stock_entry(
@@ -177,10 +177,10 @@ class TestSubcontractingReceipt(FrappeTestCase):
 		        receive more than the required qty in the SCO.
 		Expected Result: Error Raised for Over Receipt against SCO.
 		"""
-		from erpnext.controllers.subcontracting_controller import (
+		from psmnext.controllers.subcontracting_controller import (
 			make_rm_stock_entry as make_subcontract_transfer_entry,
 		)
-		from erpnext.subcontracting.doctype.subcontracting_order.subcontracting_order import (
+		from psmnext.subcontracting.doctype.subcontracting_order.subcontracting_order import (
 			make_subcontracting_receipt,
 		)
 
@@ -277,7 +277,7 @@ class TestSubcontractingReceipt(FrappeTestCase):
 		scr1.save()
 		scr1.submit()
 
-		from erpnext.controllers.status_updater import OverAllowanceError
+		from psmnext.controllers.status_updater import OverAllowanceError
 
 		args = frappe._dict(scr_name=scr1.name, qty=-15)
 		self.assertRaises(OverAllowanceError, make_return_subcontracting_receipt, **args)
@@ -350,7 +350,7 @@ class TestSubcontractingReceipt(FrappeTestCase):
 		scr.save()
 		scr.submit()
 
-		self.assertEqual(cint(erpnext.is_perpetual_inventory_enabled(scr.company)), 1)
+		self.assertEqual(cint(psmnext.is_perpetual_inventory_enabled(scr.company)), 1)
 
 		gl_entries = get_gl_entries("Subcontracting Receipt", scr.name)
 		self.assertTrue(gl_entries)
@@ -860,7 +860,7 @@ class TestSubcontractingReceipt(FrappeTestCase):
 		frappe.db.set_single_value("Stock Settings", "use_serial_batch_fields", 1)
 
 	def test_quality_inspection_for_subcontracting_receipt(self):
-		from erpnext.stock.doctype.quality_inspection.test_quality_inspection import (
+		from psmnext.stock.doctype.quality_inspection.test_quality_inspection import (
 			create_quality_inspection,
 		)
 
@@ -989,7 +989,7 @@ class TestSubcontractingReceipt(FrappeTestCase):
 		scr.submit()
 
 	def test_subcontracting_receipt_cancel_with_batch(self):
-		from erpnext.manufacturing.doctype.production_plan.test_production_plan import make_bom
+		from psmnext.manufacturing.doctype.production_plan.test_production_plan import make_bom
 
 		# Step - 1: Set Backflush Based On as "BOM"
 		set_backflush_based_on("BOM")
@@ -1075,7 +1075,7 @@ class TestSubcontractingReceipt(FrappeTestCase):
 
 	@change_settings("Buying Settings", {"auto_create_purchase_receipt": 1})
 	def test_auto_create_purchase_receipt(self):
-		from erpnext.buying.doctype.purchase_order.test_purchase_order import create_purchase_order
+		from psmnext.buying.doctype.purchase_order.test_purchase_order import create_purchase_order
 
 		fg_item = "Subcontracted Item SA1"
 		service_items = [
@@ -1209,7 +1209,7 @@ class TestSubcontractingReceipt(FrappeTestCase):
 		self.assertTrue(scr.items[0].serial_and_batch_bundle)
 
 	def test_use_serial_batch_fields_for_subcontracting_receipt_with_rejected_qty(self):
-		from erpnext.stock.doctype.warehouse.test_warehouse import create_warehouse
+		from psmnext.stock.doctype.warehouse.test_warehouse import create_warehouse
 
 		fg_item = make_item(
 			"Test Subcontracted Item With Batch No for Rejected Qty",
@@ -1289,7 +1289,7 @@ class TestSubcontractingReceipt(FrappeTestCase):
 		self.assertTrue(scr.items[0].rejected_serial_and_batch_bundle)
 
 	def test_subcontracting_receipt_for_batch_materials_without_use_serial_batch_fields(self):
-		from erpnext.controllers.subcontracting_controller import make_rm_stock_entry
+		from psmnext.controllers.subcontracting_controller import make_rm_stock_entry
 
 		set_backflush_based_on("Material Transferred for Subcontract")
 

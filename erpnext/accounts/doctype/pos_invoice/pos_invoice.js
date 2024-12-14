@@ -1,11 +1,11 @@
 // Copyright (c) 2020, Frappe Technologies Pvt. Ltd. and contributors
 // For license information, please see license.txt
 
-frappe.provide("erpnext.accounts");
-erpnext.sales_common.setup_selling_controller();
+frappe.provide("psmnext.accounts");
+psmnext.sales_common.setup_selling_controller();
 
-erpnext.accounts.pos.setup("POS Invoice");
-erpnext.selling.POSInvoiceController = class POSInvoiceController extends erpnext.selling.SellingController {
+psmnext.accounts.pos.setup("POS Invoice");
+psmnext.selling.POSInvoiceController = class POSInvoiceController extends psmnext.selling.SellingController {
 	settings = {};
 
 	setup(doc) {
@@ -14,7 +14,7 @@ erpnext.selling.POSInvoiceController = class POSInvoiceController extends erpnex
 	}
 
 	company() {
-		erpnext.accounts.dimensions.update_dimension(this.frm, this.frm.doctype);
+		psmnext.accounts.dimensions.update_dimension(this.frm, this.frm.doctype);
 		this.frm.set_value("set_warehouse", "");
 		this.frm.set_value("taxes_and_charges", "");
 	}
@@ -42,7 +42,7 @@ erpnext.selling.POSInvoiceController = class POSInvoiceController extends erpnex
 
 		this.frm.set_query("item_code", "items", function (doc) {
 			return {
-				query: "erpnext.accounts.doctype.pos_invoice.pos_invoice.item_query",
+				query: "psmnext.accounts.doctype.pos_invoice.pos_invoice.item_query",
 				filters: {
 					has_variants: ["=", 0],
 					is_sales_item: ["=", 1],
@@ -53,7 +53,7 @@ erpnext.selling.POSInvoiceController = class POSInvoiceController extends erpnex
 			};
 		});
 
-		erpnext.accounts.dimensions.setup_dimension_filters(this.frm, this.frm.doctype);
+		psmnext.accounts.dimensions.setup_dimension_filters(this.frm, this.frm.doctype);
 	}
 
 	onload_post_render(frm) {
@@ -127,9 +127,9 @@ erpnext.selling.POSInvoiceController = class POSInvoiceController extends erpnex
 		if (!this.frm.doc.customer) return;
 		const pos_profile = this.frm.doc.pos_profile;
 		if (this.frm.updating_party_details) return;
-		erpnext.utils.get_party_details(
+		psmnext.utils.get_party_details(
 			this.frm,
-			"erpnext.accounts.party.get_party_details",
+			"psmnext.accounts.party.get_party_details",
 			{
 				posting_date: this.frm.doc.posting_date,
 				party: this.frm.doc.customer,
@@ -152,7 +152,7 @@ erpnext.selling.POSInvoiceController = class POSInvoiceController extends erpnex
 		}
 
 		frappe.call({
-			method: "erpnext.selling.page.point_of_sale.point_of_sale.get_pos_profile_data",
+			method: "psmnext.selling.page.point_of_sale.point_of_sale.get_pos_profile_data",
 			args: { pos_profile: frm.pos_profile },
 			callback: ({ message: profile }) => {
 				this.update_customer_groups_settings(profile?.customer_groups);
@@ -206,13 +206,13 @@ erpnext.selling.POSInvoiceController = class POSInvoiceController extends erpnex
 
 	make_sales_return() {
 		frappe.model.open_mapped_doc({
-			method: "erpnext.accounts.doctype.pos_invoice.pos_invoice.make_sales_return",
+			method: "psmnext.accounts.doctype.pos_invoice.pos_invoice.make_sales_return",
 			frm: cur_frm,
 		});
 	}
 };
 
-extend_cscript(cur_frm.cscript, new erpnext.selling.POSInvoiceController({ frm: cur_frm }));
+extend_cscript(cur_frm.cscript, new psmnext.selling.POSInvoiceController({ frm: cur_frm }));
 
 frappe.ui.form.on("POS Invoice", {
 	redeem_loyalty_points: function (frm) {
@@ -224,7 +224,7 @@ frappe.ui.form.on("POS Invoice", {
 			frm.events.set_loyalty_points(frm);
 		} else {
 			frappe.call({
-				method: "erpnext.accounts.doctype.loyalty_program.loyalty_program.get_redeemption_factor",
+				method: "psmnext.accounts.doctype.loyalty_program.loyalty_program.get_redeemption_factor",
 				args: {
 					loyalty_program: frm.doc.loyalty_program,
 				},
@@ -241,7 +241,7 @@ frappe.ui.form.on("POS Invoice", {
 	get_loyalty_details: function (frm) {
 		if (frm.doc.customer && frm.doc.redeem_loyalty_points) {
 			frappe.call({
-				method: "erpnext.accounts.doctype.loyalty_program.loyalty_program.get_loyalty_program_details",
+				method: "psmnext.accounts.doctype.loyalty_program.loyalty_program.get_loyalty_program_details",
 				args: {
 					customer: frm.doc.customer,
 					loyalty_program: frm.doc.loyalty_program,

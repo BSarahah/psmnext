@@ -192,7 +192,7 @@
  "issingle": 1,
  "modified": "2019-08-07 15:26:00.653433",
  "modified_by": "Administrator",
- "module": "ERPNext Integrations",
+ "module": "psmnext Integrations",
  "name": "QuickBooks Migrator",
  "owner": "Administrator",
  "permissions": [

@@ -1,6 +1,6 @@
-frappe.provide("erpnext.accounts");
+frappe.provide("psmnext.accounts");
 
-erpnext.accounts.unreconcile_payment = {
+psmnext.accounts.unreconcile_payment = {
 	add_unreconcile_btn(frm) {
 		if (frm.doc.docstatus == 1) {
 			if (
@@ -14,7 +14,7 @@ erpnext.accounts.unreconcile_payment = {
 			}
 
 			frappe.call({
-				method: "erpnext.accounts.doctype.unreconcile_payment.unreconcile_payment.doc_has_references",
+				method: "psmnext.accounts.doctype.unreconcile_payment.unreconcile_payment.doc_has_references",
 				args: {
 					doctype: frm.doc.doctype,
 					docname: frm.doc.name,
@@ -24,7 +24,7 @@ erpnext.accounts.unreconcile_payment = {
 						frm.add_custom_button(
 							__("UnReconcile"),
 							function () {
-								erpnext.accounts.unreconcile_payment.build_unreconcile_dialog(frm);
+								psmnext.accounts.unreconcile_payment.build_unreconcile_dialog(frm);
 							},
 							__("Actions")
 						);
@@ -106,7 +106,7 @@ erpnext.accounts.unreconcile_payment = {
 
 			// get linked payments
 			frappe.call({
-				method: "erpnext.accounts.doctype.unreconcile_payment.unreconcile_payment.get_linked_payments_for_doc",
+				method: "psmnext.accounts.doctype.unreconcile_payment.unreconcile_payment.get_linked_payments_for_doc",
 				args: {
 					company: frm.doc.company,
 					doctype: frm.doc.doctype,
@@ -129,11 +129,11 @@ erpnext.accounts.unreconcile_payment = {
 								let selected_allocations = values.allocations.filter((x) => x.__checked);
 								if (selected_allocations.length > 0) {
 									let selection_map =
-										erpnext.accounts.unreconcile_payment.build_selection_map(
+										psmnext.accounts.unreconcile_payment.build_selection_map(
 											frm,
 											selected_allocations
 										);
-									erpnext.accounts.unreconcile_payment.create_unreconcile_docs(
+									psmnext.accounts.unreconcile_payment.create_unreconcile_docs(
 										selection_map
 									);
 									d.hide();
@@ -152,7 +152,7 @@ erpnext.accounts.unreconcile_payment = {
 
 	create_unreconcile_docs(selection_map) {
 		frappe.call({
-			method: "erpnext.accounts.doctype.unreconcile_payment.unreconcile_payment.create_unreconcile_doc_for_selection",
+			method: "psmnext.accounts.doctype.unreconcile_payment.unreconcile_payment.create_unreconcile_doc_for_selection",
 			args: {
 				selections: selection_map,
 			},

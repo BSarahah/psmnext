@@ -4,7 +4,7 @@
 
 import frappe
 
-from erpnext.projects.report.billing_summary import get_columns, get_data
+from psmnext.projects.report.billing_summary import get_columns, get_data
 
 
 def execute(filters=None):

@@ -2,10 +2,10 @@ import unittest
 
 import frappe
 
-import erpnext
+import psmnext
 
 
-@erpnext.allow_regional
+@psmnext.allow_regional
 def test_method():
 	return "original"
 

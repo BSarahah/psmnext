@@ -5,7 +5,7 @@ frappe.ui.form.on("Code List", {
 	refresh: (frm) => {
 		if (!frm.doc.__islocal) {
 			frm.add_custom_button(__("Import Genericode File"), function () {
-				erpnext.edi.import_genericode(frm);
+				psmnext.edi.import_genericode(frm);
 			});
 		}
 	},

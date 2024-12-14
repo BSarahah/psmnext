@@ -15,7 +15,7 @@ class HomepageSection(Document):
 	if TYPE_CHECKING:
 		from frappe.types import DF
 
-		from erpnext.portal.doctype.homepage_section_card.homepage_section_card import (
+		from psmnext.portal.doctype.homepage_section_card.homepage_section_card import (
 			HomepageSectionCard,
 		)
 

@@ -9,8 +9,8 @@ from frappe import _
 from frappe.model.document import Document
 from frappe.utils import add_to_date, flt, get_datetime, getdate, time_diff_in_hours
 
-from erpnext.controllers.queries import get_match_cond
-from erpnext.setup.utils import get_exchange_rate
+from psmnext.controllers.queries import get_match_cond
+from psmnext.setup.utils import get_exchange_rate
 
 
 class OverlapError(frappe.ValidationError):
@@ -30,7 +30,7 @@ class Timesheet(Document):
 	if TYPE_CHECKING:
 		from frappe.types import DF
 
-		from erpnext.projects.doctype.timesheet_detail.timesheet_detail import TimesheetDetail
+		from psmnext.projects.doctype.timesheet_detail.timesheet_detail import TimesheetDetail
 
 		amended_from: DF.Link | None
 		base_total_billable_amount: DF.Currency

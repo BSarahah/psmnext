@@ -6,11 +6,11 @@ from frappe import _
 from frappe.model.mapper import get_mapped_doc
 from frappe.utils import cint, flt, get_link_to_form, getdate, nowdate
 
-import erpnext
-from erpnext.accounts.utils import get_account_currency
-from erpnext.buying.utils import check_on_hold_or_closed_status
-from erpnext.controllers.subcontracting_controller import SubcontractingController
-from erpnext.stock.stock_ledger import get_valuation_rate
+import psmnext
+from psmnext.accounts.utils import get_account_currency
+from psmnext.buying.utils import check_on_hold_or_closed_status
+from psmnext.controllers.subcontracting_controller import SubcontractingController
+from psmnext.stock.stock_ledger import get_valuation_rate
 
 
 class SubcontractingReceipt(SubcontractingController):
@@ -22,13 +22,13 @@ class SubcontractingReceipt(SubcontractingController):
 	if TYPE_CHECKING:
 		from frappe.types import DF
 
-		from erpnext.stock.doctype.landed_cost_taxes_and_charges.landed_cost_taxes_and_charges import (
+		from psmnext.stock.doctype.landed_cost_taxes_and_charges.landed_cost_taxes_and_charges import (
 			LandedCostTaxesandCharges,
 		)
-		from erpnext.subcontracting.doctype.subcontracting_receipt_item.subcontracting_receipt_item import (
+		from psmnext.subcontracting.doctype.subcontracting_receipt_item.subcontracting_receipt_item import (
 			SubcontractingReceiptItem,
 		)
-		from erpnext.subcontracting.doctype.subcontracting_receipt_supplied_item.subcontracting_receipt_supplied_item import (
+		from psmnext.subcontracting.doctype.subcontracting_receipt_supplied_item.subcontracting_receipt_supplied_item import (
 			SubcontractingReceiptSuppliedItem,
 		)
 
@@ -261,7 +261,7 @@ class SubcontractingReceipt(SubcontractingController):
 							self.set_warehouse,
 							self.doctype,
 							self.name,
-							currency=erpnext.get_company_currency(self.company),
+							currency=psmnext.get_company_currency(self.company),
 							company=self.company,
 						)
 						or scrap_item.rate
@@ -506,9 +506,9 @@ class SubcontractingReceipt(SubcontractingController):
 			)
 
 	def get_gl_entries(self, warehouse_account=None):
-		from erpnext.accounts.general_ledger import process_gl_map
+		from psmnext.accounts.general_ledger import process_gl_map
 
-		if not erpnext.is_perpetual_inventory_enabled(self.company):
+		if not psmnext.is_perpetual_inventory_enabled(self.company):
 			return []
 
 		gl_entries = []
@@ -678,7 +678,7 @@ class SubcontractingReceipt(SubcontractingController):
 
 @frappe.whitelist()
 def make_subcontract_return(source_name, target_doc=None):
-	from erpnext.controllers.sales_and_purchase_return import make_return_doc
+	from psmnext.controllers.sales_and_purchase_return import make_return_doc
 
 	return make_return_doc("Subcontracting Receipt", source_name, target_doc)
 

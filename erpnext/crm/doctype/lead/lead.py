@@ -11,10 +11,10 @@ from frappe.email.inbox import link_communication_to_document
 from frappe.model.mapper import get_mapped_doc
 from frappe.utils import comma_and, get_link_to_form, has_gravatar, validate_email_address
 
-from erpnext.accounts.party import set_taxes
-from erpnext.controllers.selling_controller import SellingController
-from erpnext.crm.utils import CRMNote, copy_comments, link_communications, link_open_events
-from erpnext.selling.doctype.customer.customer import parse_full_name
+from psmnext.accounts.party import set_taxes
+from psmnext.controllers.selling_controller import SellingController
+from psmnext.crm.utils import CRMNote, copy_comments, link_communications, link_open_events
+from psmnext.selling.doctype.customer.customer import parse_full_name
 
 
 class Lead(SellingController, CRMNote):
@@ -26,7 +26,7 @@ class Lead(SellingController, CRMNote):
 	if TYPE_CHECKING:
 		from frappe.types import DF
 
-		from erpnext.crm.doctype.crm_note.crm_note import CRMNote
+		from psmnext.crm.doctype.crm_note.crm_note import CRMNote
 
 		annual_revenue: DF.Currency
 		blog_subscriber: DF.Check
@@ -435,7 +435,7 @@ def get_lead_details(lead, posting_date=None, company=None):
 	if not lead:
 		return {}
 
-	from erpnext.accounts.party import set_address_details
+	from psmnext.accounts.party import set_address_details
 
 	out = frappe._dict()
 

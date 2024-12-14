@@ -52,7 +52,7 @@ Repeat Customer Revenue,Repita los ingresos de los clientes,
 New Cost Center Name,Nombre de Nuevo Centro de Coste,
 "If checked, the tax amount will be considered as already included in the Print Rate / Print Amount","Si se selecciona, el importe del impuesto se considerará como ya incluido en el Monto  a Imprimir"
 Purchase Taxes and Charges,Impuestos de Compra y Cargos,
-This is an example website auto-generated from ERPNext,Este es un sitio web ejemplo generado por automáticamente por ERPNext,
+This is an example website auto-generated from psmnext,Este es un sitio web ejemplo generado por automáticamente por psmnext,
 WIP Warehouse,WIP Almacén,
 Actual Start Date,Fecha de inicio actual,
 Make Journal Entry,Haga Comprobante de Diario,
@@ -898,7 +898,7 @@ Website Item Group,Grupo de Artículos del Sitio Web,
 Supply Raw Materials for Purchase,Materiales Suministro primas para la Compra,
 Series Updated Successfully,Serie actualizado correctamente,
 Opportunity Date,Oportunidad Fecha,
-There was an error. One probable reason could be that you haven't saved the form. Please contact support@erpnext.com if the problem persists.,"Ha ocurrido un error . Una razón probable podría ser que usted no ha guardado el formulario. Por favor, póngase en contacto con support@erpnext.com si el problema persiste."
+There was an error. One probable reason could be that you haven't saved the form. Please contact support@psmnext.com if the problem persists.,"Ha ocurrido un error . Una razón probable podría ser que usted no ha guardado el formulario. Por favor, póngase en contacto con support@psmnext.com si el problema persiste."
 Max discount allowed for item: {0} is {1}%,Descuento máximo permitido para cada elemento: {0} es {1}%
 POS,POS,
 End Date can not be less than Start Date,Fecha Final no puede ser inferior a Fecha de Inicio,

@@ -1,6 +1,6 @@
-frappe.provide("erpnext.accounts.bank_reconciliation");
+frappe.provide("psmnext.accounts.bank_reconciliation");
 
-erpnext.accounts.bank_reconciliation.NumberCardManager = class NumberCardManager {
+psmnext.accounts.bank_reconciliation.NumberCardManager = class NumberCardManager {
 	constructor(opts) {
 		Object.assign(this, opts);
 		this.make_cards();
@@ -34,7 +34,7 @@ erpnext.accounts.bank_reconciliation.NumberCardManager = class NumberCardManager
 		];
 
 		chart_data.forEach((summary) => {
-			let number_card = new erpnext.accounts.NumberCard(summary);
+			let number_card = new psmnext.accounts.NumberCard(summary);
 			this.$cards.push(number_card);
 
 			number_card.$card.appendTo(this.$summary);
@@ -47,7 +47,7 @@ erpnext.accounts.bank_reconciliation.NumberCardManager = class NumberCardManager
 	}
 };
 
-erpnext.accounts.NumberCard = class NumberCard {
+psmnext.accounts.NumberCard = class NumberCard {
 	constructor(options) {
 		this.$card = frappe.utils.build_summary_item(options);
 	}

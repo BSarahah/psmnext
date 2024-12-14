@@ -2,9 +2,9 @@ import frappe
 from frappe.tests.utils import FrappeTestCase
 from frappe.utils import today
 
-from erpnext.accounts.doctype.purchase_invoice.test_purchase_invoice import make_purchase_invoice
-from erpnext.accounts.report.accounts_payable.accounts_payable import execute
-from erpnext.accounts.test.accounts_mixin import AccountsTestMixin
+from psmnext.accounts.doctype.purchase_invoice.test_purchase_invoice import make_purchase_invoice
+from psmnext.accounts.report.accounts_payable.accounts_payable import execute
+from psmnext.accounts.test.accounts_mixin import AccountsTestMixin
 
 
 class TestAccountsPayable(AccountsTestMixin, FrappeTestCase):

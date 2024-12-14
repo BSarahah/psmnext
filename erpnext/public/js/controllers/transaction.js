@@ -2,7 +2,7 @@
 // License: GNU General Public License v3. See license.txt
 
 
-erpnext.TransactionController = class TransactionController extends erpnext.taxes_and_totals {
+psmnext.TransactionController = class TransactionController extends psmnext.taxes_and_totals {
 	setup() {
 		super.setup();
 		let me = this;
@@ -126,7 +126,7 @@ erpnext.TransactionController = class TransactionController extends erpnext.taxe
 					frappe.model.set_value(item.doctype, item.name, "use_serial_batch_fields", 1);
 				}
 
-				erpnext.accounts.dimensions.copy_dimension_from_first_row(frm, cdt, cdn, 'items');
+				psmnext.accounts.dimensions.copy_dimension_from_first_row(frm, cdt, cdn, 'items');
 			}
 		});
 
@@ -216,7 +216,7 @@ erpnext.TransactionController = class TransactionController extends erpnext.taxe
 			this.frm.set_query("blanket_order", "items", function(doc, cdt, cdn) {
 				var item = locals[cdt][cdn];
 				return {
-					query: "erpnext.controllers.queries.get_blanket_orders",
+					query: "psmnext.controllers.queries.get_blanket_orders",
 					filters: {
 						"company": doc.company,
 						"blanket_order_type": doc.doctype === "Sales Order" ? "Selling" : "Purchasing",
@@ -253,7 +253,7 @@ erpnext.TransactionController = class TransactionController extends erpnext.taxe
 
 	toggle_enable_for_stock_uom(field) {
 		frappe.call({
-			method: 'erpnext.stock.doctype.stock_settings.stock_settings.get_enable_stock_uom_editing',
+			method: 'psmnext.stock.doctype.stock_settings.stock_settings.get_enable_stock_uom_editing',
 			callback: (r) => {
 				if (r.message) {
 					var value = r.message[field];
@@ -346,7 +346,7 @@ erpnext.TransactionController = class TransactionController extends erpnext.taxe
 			? "Inward" : "Outward";
 
 		frappe.call({
-			method:"erpnext.accounts.doctype.payment_request.payment_request.make_payment_request",
+			method:"psmnext.accounts.doctype.payment_request.payment_request.make_payment_request",
 			args: {
 				dt: me.frm.doc.doctype,
 				dn: me.frm.doc.name,
@@ -380,13 +380,13 @@ erpnext.TransactionController = class TransactionController extends erpnext.taxe
 	}
 
 	refresh() {
-		erpnext.toggle_naming_series();
-		erpnext.hide_company(this.frm);
+		psmnext.toggle_naming_series();
+		psmnext.hide_company(this.frm);
 		this.set_dynamic_labels();
 		this.setup_sms();
 		this.setup_quality_inspection();
 		this.validate_has_items();
-		erpnext.utils.view_serial_batch_nos(this.frm);
+		psmnext.utils.view_serial_batch_nos(this.frm);
 		this.set_route_options_for_new_doc();
 	}
 
@@ -420,14 +420,14 @@ erpnext.TransactionController = class TransactionController extends erpnext.taxe
 
 	scan_barcode() {
 		frappe.flags.dialog_set = false;
-		const barcode_scanner = new erpnext.utils.BarcodeScanner({frm:this.frm});
+		const barcode_scanner = new psmnext.utils.BarcodeScanner({frm:this.frm});
 		barcode_scanner.process_scan();
 	}
 
 	barcode(doc, cdt, cdn)  {
 		let row = locals[cdt][cdn];
 		if (row.barcode) {
-			erpnext.stock.utils.set_item_details_using_barcode(this.frm, row, (r) => {
+			psmnext.stock.utils.set_item_details_using_barcode(this.frm, row, (r) => {
 				frappe.model.set_value(cdt, cdn, {
 					"item_code": r.message.item_code,
 					"qty": 1,
@@ -453,7 +453,7 @@ erpnext.TransactionController = class TransactionController extends erpnext.taxe
 
 		if (taxes_and_charges_field) {
 			return frappe.call({
-				method: "erpnext.controllers.accounts_controller.get_default_taxes_and_charges",
+				method: "psmnext.controllers.accounts_controller.get_default_taxes_and_charges",
 				args: {
 					"master_doctype": taxes_and_charges_field.options,
 					"tax_template": me.frm.doc.taxes_and_charges || "",
@@ -493,7 +493,7 @@ erpnext.TransactionController = class TransactionController extends erpnext.taxe
 	}
 
 	send_sms() {
-		var sms_man = new erpnext.SMSManager(this.frm.doc);
+		var sms_man = new psmnext.SMSManager(this.frm.doc);
 	}
 
 	item_code(doc, cdt, cdn) {
@@ -527,7 +527,7 @@ erpnext.TransactionController = class TransactionController extends erpnext.taxe
 			} else {
 				item.pricing_rules = ''
 				return this.frm.call({
-					method: "erpnext.stock.get_item_details.get_item_details",
+					method: "psmnext.stock.get_item_details.get_item_details",
 					child: item,
 					args: {
 						doc: me.frm.doc,
@@ -646,7 +646,7 @@ erpnext.TransactionController = class TransactionController extends erpnext.taxe
 										}
 
 										frappe.flags.dialog_set = true;
-										erpnext.show_serial_batch_selector(me.frm, d, (item) => {
+										psmnext.show_serial_batch_selector(me.frm, d, (item) => {
 											me.frm.script_manager.trigger('qty', item.doctype, item.name);
 											if (!me.frm.doc.set_warehouse)
 												me.frm.script_manager.trigger('warehouse', item.doctype, item.name);
@@ -726,7 +726,7 @@ erpnext.TransactionController = class TransactionController extends erpnext.taxe
 		}
 
 		frappe.call({
-			method: 'erpnext.stock.utils.get_incoming_rate',
+			method: 'psmnext.stock.utils.get_incoming_rate',
 			args: {
 				args: item_args
 			},
@@ -932,7 +932,7 @@ erpnext.TransactionController = class TransactionController extends erpnext.taxe
 				var party = me.frm.doc[frappe.model.scrub(party_type)];
 				if(party && me.frm.doc.company) {
 					return frappe.call({
-						method: "erpnext.accounts.party.get_party_account",
+						method: "psmnext.accounts.party.get_party_account",
 						args: {
 							company: me.frm.doc.company,
 							party_type: party_type,
@@ -960,7 +960,7 @@ erpnext.TransactionController = class TransactionController extends erpnext.taxe
 
 				if (!is_drop_ship) {
 					console.log('get_shipping_address');
-					erpnext.utils.get_shipping_address(this.frm, function() {
+					psmnext.utils.get_shipping_address(this.frm, function() {
 						set_party_account(set_pricing);
 					});
 				}
@@ -970,7 +970,7 @@ erpnext.TransactionController = class TransactionController extends erpnext.taxe
 		}
 
 		if(this.frm.doc.company) {
-			erpnext.last_selected_company = this.frm.doc.company;
+			psmnext.last_selected_company = this.frm.doc.company;
 		}
 	}
 
@@ -989,7 +989,7 @@ erpnext.TransactionController = class TransactionController extends erpnext.taxe
 			if ((this.frm.doc.doctype == "Sales Invoice" && this.frm.doc.customer) ||
 				(this.frm.doc.doctype == "Purchase Invoice" && this.frm.doc.supplier)) {
 				return frappe.call({
-					method: "erpnext.accounts.party.get_due_date",
+					method: "psmnext.accounts.party.get_due_date",
 					args: {
 						"posting_date": me.frm.doc.posting_date,
 						"party_type": me.frm.doc.doctype == "Sales Invoice" ? "Customer" : "Supplier",
@@ -1063,11 +1063,11 @@ erpnext.TransactionController = class TransactionController extends erpnext.taxe
 	}
 
 	get_company_currency() {
-		return erpnext.get_currency(this.frm.doc.company);
+		return psmnext.get_currency(this.frm.doc.company);
 	}
 
 	contact_person() {
-		erpnext.utils.get_contact_details(this.frm);
+		psmnext.utils.get_contact_details(this.frm);
 	}
 
 	currency() {
@@ -1119,7 +1119,7 @@ erpnext.TransactionController = class TransactionController extends erpnext.taxe
 
 		}
 		// Make read only if Accounts Settings doesn't allow stale rates
-		this.frm.set_df_property("conversion_rate", "read_only", erpnext.stale_rate_allowed() ? 0 : 1);
+		this.frm.set_df_property("conversion_rate", "read_only", psmnext.stale_rate_allowed() ? 0 : 1);
 	}
 
 	apply_discount_on_item(doc, cdt, cdn, field) {
@@ -1178,7 +1178,7 @@ erpnext.TransactionController = class TransactionController extends erpnext.taxe
 
 		if (!transaction_date || !from_currency || !to_currency) return;
 		return frappe.call({
-			method: "erpnext.setup.utils.get_exchange_rate",
+			method: "psmnext.setup.utils.get_exchange_rate",
 			args: {
 				transaction_date: transaction_date,
 				from_currency: from_currency,
@@ -1230,7 +1230,7 @@ erpnext.TransactionController = class TransactionController extends erpnext.taxe
 		item.pricing_rules = ''
 		if(item.item_code && item.uom) {
 			return this.frm.call({
-				method: "erpnext.stock.get_item_details.get_conversion_factor",
+				method: "psmnext.stock.get_item_details.get_conversion_factor",
 				args: {
 					item_code: item.item_code,
 					uom: item.uom
@@ -1370,7 +1370,7 @@ erpnext.TransactionController = class TransactionController extends erpnext.taxe
 
 		if(child.service_start_date) {
 			frappe.call({
-				"method": "erpnext.stock.get_item_details.calculate_service_end_date",
+				"method": "psmnext.stock.get_item_details.calculate_service_end_date",
 				args: {"args": child},
 				callback: function(r) {
 					frappe.model.set_value(cdt, cdn, "service_end_date", r.message.service_end_date);
@@ -1536,7 +1536,7 @@ erpnext.TransactionController = class TransactionController extends erpnext.taxe
 			params.uom = row.uom;
 
 			frappe.call({
-				method: "erpnext.stock.get_item_details.get_batch_based_item_price",
+				method: "psmnext.stock.get_item_details.get_batch_based_item_price",
 				args: {
 					params: params,
 					item_code: row.item_code,
@@ -1612,7 +1612,7 @@ erpnext.TransactionController = class TransactionController extends erpnext.taxe
 				}
 			});
 			return this.frm.call({
-				method: "erpnext.accounts.doctype.pricing_rule.pricing_rule.remove_pricing_rules",
+				method: "psmnext.accounts.doctype.pricing_rule.pricing_rule.remove_pricing_rules",
 				args: { item_list: item_list },
 				callback: function(r) {
 					if (!r.exc && r.message) {
@@ -1636,7 +1636,7 @@ erpnext.TransactionController = class TransactionController extends erpnext.taxe
 		if (item.pricing_rules){
 			let me = this;
 			return this.frm.call({
-				method: "erpnext.accounts.doctype.pricing_rule.pricing_rule.remove_pricing_rule_for_item",
+				method: "psmnext.accounts.doctype.pricing_rule.pricing_rule.remove_pricing_rule_for_item",
 				args: {
 					pricing_rules: item.pricing_rules,
 					item_details: {
@@ -1679,7 +1679,7 @@ erpnext.TransactionController = class TransactionController extends erpnext.taxe
 		}
 
 		return this.frm.call({
-			method: "erpnext.accounts.doctype.pricing_rule.pricing_rule.apply_pricing_rule",
+			method: "psmnext.accounts.doctype.pricing_rule.pricing_rule.apply_pricing_rule",
 			args: {	args: args, doc: me.frm.doc },
 			callback: function(r) {
 				if (!r.exc && r.message) {
@@ -1878,7 +1878,7 @@ erpnext.TransactionController = class TransactionController extends erpnext.taxe
 
 	apply_price_list(item, reset_plc_conversion) {
 		// We need to reset plc_conversion_rate sometimes because the call to
-		// `erpnext.stock.get_item_details.apply_price_list` is sensitive to its value
+		// `psmnext.stock.get_item_details.apply_price_list` is sensitive to its value
 
 
 		if (this.frm.doc.doctype === "Material Request") {
@@ -1899,7 +1899,7 @@ erpnext.TransactionController = class TransactionController extends erpnext.taxe
 
 		me.in_apply_price_list = true;
 		return this.frm.call({
-			method: "erpnext.stock.get_item_details.apply_price_list",
+			method: "psmnext.stock.get_item_details.apply_price_list",
 			args: {	args: args, doc: me.frm.doc },
 			callback: function(r) {
 				if (!r.exc) {
@@ -2006,7 +2006,7 @@ erpnext.TransactionController = class TransactionController extends erpnext.taxe
 	get_terms() {
 		var me = this;
 
-		erpnext.utils.get_terms(this.frm.doc.tc_name, this.frm.doc, function(r) {
+		psmnext.utils.get_terms(this.frm.doc.tc_name, this.frm.doc, function(r) {
 			if(!r.exc) {
 				me.frm.set_value("terms", r.message);
 			}
@@ -2017,7 +2017,7 @@ erpnext.TransactionController = class TransactionController extends erpnext.taxe
 		var me = this;
 		if(this.frm.doc.taxes_and_charges) {
 			return this.frm.call({
-				method: "erpnext.controllers.accounts_controller.get_taxes_and_charges",
+				method: "psmnext.controllers.accounts_controller.get_taxes_and_charges",
 				args: {
 					"master_doctype": frappe.meta.get_docfield(this.frm.doc.doctype, "taxes_and_charges",
 						this.frm.doc.name).options,
@@ -2047,7 +2047,7 @@ erpnext.TransactionController = class TransactionController extends erpnext.taxe
 
 		frappe.run_serially([
 			() => this.update_item_tax_map(),
-			() => erpnext.utils.set_taxes(this.frm, "tax_category"),
+			() => psmnext.utils.set_taxes(this.frm, "tax_category"),
 		]);
 	}
 
@@ -2070,7 +2070,7 @@ erpnext.TransactionController = class TransactionController extends erpnext.taxe
 
 		if (item_codes.length) {
 			return this.frm.call({
-				method: "erpnext.stock.get_item_details.get_item_tax_info",
+				method: "psmnext.stock.get_item_details.get_item_tax_info",
 				args: {
 					company: me.frm.doc.company,
 					tax_category: cstr(me.frm.doc.tax_category),
@@ -2101,7 +2101,7 @@ erpnext.TransactionController = class TransactionController extends erpnext.taxe
 
 		if(item.item_tax_template) {
 			return this.frm.call({
-				method: "erpnext.stock.get_item_details.get_item_tax_map",
+				method: "psmnext.stock.get_item_details.get_item_tax_map",
 				args: {
 					company: me.frm.doc.company,
 					item_tax_template: item.item_tax_template,
@@ -2175,7 +2175,7 @@ erpnext.TransactionController = class TransactionController extends erpnext.taxe
 
 		return;
 		// if(!this.item_selector) {
-		// 	this.item_selector = new erpnext.ItemSelector({frm: this.frm});
+		// 	this.item_selector = new psmnext.ItemSelector({frm: this.frm});
 		// }
 	}
 
@@ -2323,7 +2323,7 @@ erpnext.TransactionController = class TransactionController extends erpnext.taxe
 			primary_action: function () {
 				const data = dialog.get_values();
 				frappe.call({
-					method: "erpnext.controllers.stock_controller.make_quality_inspections",
+					method: "psmnext.controllers.stock_controller.make_quality_inspections",
 					args: {
 						doctype: me.frm.doc.doctype,
 						docname: me.frm.doc.name,
@@ -2385,12 +2385,12 @@ erpnext.TransactionController = class TransactionController extends erpnext.taxe
 	}
 
 	get_method_for_payment() {
-		var method = "erpnext.accounts.doctype.payment_entry.payment_entry.get_payment_entry";
+		var method = "psmnext.accounts.doctype.payment_entry.payment_entry.get_payment_entry";
 		if(cur_frm.doc.__onload && cur_frm.doc.__onload.make_payment_via_journal_entry){
 			if(['Sales Invoice', 'Purchase Invoice'].includes( cur_frm.doc.doctype)){
-				method = "erpnext.accounts.doctype.journal_entry.journal_entry.get_payment_entry_against_invoice";
+				method = "psmnext.accounts.doctype.journal_entry.journal_entry.get_payment_entry_against_invoice";
 			}else {
-				method= "erpnext.accounts.doctype.journal_entry.journal_entry.get_payment_entry_against_order";
+				method= "psmnext.accounts.doctype.journal_entry.journal_entry.get_payment_entry_against_order";
 			}
 		}
 
@@ -2426,7 +2426,7 @@ erpnext.TransactionController = class TransactionController extends erpnext.taxe
 			if (item.warehouse) filters["warehouse"] = item.warehouse;
 
 			return {
-				query : "erpnext.controllers.queries.get_batch_no",
+				query : "psmnext.controllers.queries.get_batch_no",
 				filters: filters
 			}
 		}
@@ -2448,7 +2448,7 @@ erpnext.TransactionController = class TransactionController extends erpnext.taxe
 			if (doc.company)
 				filters['company'] = doc.company;
 			return {
-				query: "erpnext.controllers.queries.get_tax_template",
+				query: "psmnext.controllers.queries.get_tax_template",
 				filters: filters
 			}
 		}
@@ -2460,7 +2460,7 @@ erpnext.TransactionController = class TransactionController extends erpnext.taxe
 		if(doc.payment_terms_template && doc.doctype !== 'Delivery Note' && !doc.is_return) {
 			var posting_date = doc.posting_date || doc.transaction_date;
 			frappe.call({
-				method: "erpnext.controllers.accounts_controller.get_payment_terms",
+				method: "psmnext.controllers.accounts_controller.get_payment_terms",
 				args: {
 					terms_template: doc.payment_terms_template,
 					posting_date: posting_date,
@@ -2484,7 +2484,7 @@ erpnext.TransactionController = class TransactionController extends erpnext.taxe
 		var row = locals[cdt][cdn];
 		if(row.payment_term) {
 			frappe.call({
-				method: "erpnext.controllers.accounts_controller.get_payment_term_details",
+				method: "psmnext.controllers.accounts_controller.get_payment_term_details",
 				args: {
 					term: row.payment_term,
 					bill_date: this.frm.doc.bill_date,
@@ -2518,7 +2518,7 @@ erpnext.TransactionController = class TransactionController extends erpnext.taxe
 		var item = locals[cdt][cdn];
 		if (item.blanket_order && (item.parenttype=="Sales Order" || item.parenttype=="Purchase Order")) {
 			frappe.call({
-				method: "erpnext.stock.get_item_details.get_blanket_order_details",
+				method: "psmnext.stock.get_item_details.get_blanket_order_details",
 				args: {
 					args:{
 						item_code: item.item_code,
@@ -2583,7 +2583,7 @@ erpnext.TransactionController = class TransactionController extends erpnext.taxe
 	}
 };
 
-erpnext.show_serial_batch_selector = function (frm, item_row, callback, on_close, show_dialog) {
+psmnext.show_serial_batch_selector = function (frm, item_row, callback, on_close, show_dialog) {
 	let warehouse, receiving_stock, existing_stock;
 
 	let warehouse_field = "warehouse";
@@ -2635,7 +2635,7 @@ erpnext.show_serial_batch_selector = function (frm, item_row, callback, on_close
 		item_row.type_of_transaction = frm.doc.is_return ? "Outward" : "Inward";
 	}
 
-	new erpnext.SerialBatchPackageSelector(frm, item_row, (r) => {
+	new psmnext.SerialBatchPackageSelector(frm, item_row, (r) => {
 		if (r) {
 			let update_values = {
 				"serial_and_batch_bundle": r.name,
@@ -2651,14 +2651,14 @@ erpnext.show_serial_batch_selector = function (frm, item_row, callback, on_close
 	});
 }
 
-erpnext.apply_putaway_rule = (frm, purpose=null) => {
+psmnext.apply_putaway_rule = (frm, purpose=null) => {
 	if (!frm.doc.company) {
 		frappe.throw({message: __("Please select a Company first."), title: __("Mandatory")});
 	}
 	if (!frm.doc.items.length) return;
 
 	frappe.call({
-		method: "erpnext.stock.doctype.putaway_rule.putaway_rule.apply_putaway_rule",
+		method: "psmnext.stock.doctype.putaway_rule.putaway_rule.apply_putaway_rule",
 		args: {
 			doctype: frm.doctype,
 			items: frm.doc.items,

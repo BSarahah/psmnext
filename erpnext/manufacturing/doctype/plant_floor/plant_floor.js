@@ -150,7 +150,7 @@ class VisualStock {
 
 	async get_stock_summary(start, item_code, item_group) {
 		let stock_summary = await frappe.call({
-			method: "erpnext.manufacturing.doctype.plant_floor.plant_floor.get_stock_summary",
+			method: "psmnext.manufacturing.doctype.plant_floor.plant_floor.get_stock_summary",
 			args: {
 				warehouse: this.frm.doc.warehouse,
 				start: start,

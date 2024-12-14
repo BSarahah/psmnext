@@ -8,7 +8,7 @@ from frappe.query_builder import DocType
 from frappe.query_builder.functions import IfNull
 from frappe.utils import add_days, add_to_date, flt, getdate
 
-from erpnext.accounts.utils import get_fiscal_year
+from psmnext.accounts.utils import get_fiscal_year
 
 
 def execute(filters=None):

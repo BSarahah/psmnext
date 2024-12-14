@@ -23,11 +23,11 @@ from frappe.utils import (
 	nowdate,
 )
 
-import erpnext
-from erpnext import get_company_currency
-from erpnext.accounts.utils import get_fiscal_year
-from erpnext.exceptions import InvalidAccountCurrency, PartyDisabled, PartyFrozen
-from erpnext.utilities.regional import temporary_flag
+import psmnext
+from psmnext import get_company_currency
+from psmnext.accounts.utils import get_fiscal_year
+from psmnext.exceptions import InvalidAccountCurrency, PartyDisabled, PartyFrozen
+from psmnext.utilities.regional import temporary_flag
 
 try:
 	from frappe.contacts.doctype.address.address import render_address as _render_address
@@ -274,7 +274,7 @@ def set_address_details(
 	return party_address, shipping_address
 
 
-@erpnext.allow_regional
+@psmnext.allow_regional
 def get_regional_address_details(party_details, doctype, company):
 	pass
 
@@ -530,7 +530,7 @@ def validate_party_gle_currency(party_type, party, company, party_account_curren
 
 
 def validate_party_accounts(doc):
-	from erpnext.controllers.accounts_controller import validate_account_head
+	from psmnext.controllers.accounts_controller import validate_account_head
 
 	companies = []
 
@@ -674,7 +674,7 @@ def set_taxes(
 	shipping_address=None,
 	use_for_shopping_cart=None,
 ):
-	from erpnext.accounts.doctype.tax_rule.tax_rule import get_party_details, get_tax_template
+	from psmnext.accounts.doctype.tax_rule.tax_rule import get_party_details, get_tax_template
 
 	args = {party_type.lower(): party, "company": company}
 

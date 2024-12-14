@@ -6,13 +6,13 @@ import frappe
 from frappe import _, bold, throw
 from frappe.utils import cint, flt, get_link_to_form, nowtime
 
-from erpnext.accounts.party import render_address
-from erpnext.controllers.accounts_controller import get_taxes_and_charges
-from erpnext.controllers.sales_and_purchase_return import get_rate_for_return
-from erpnext.controllers.stock_controller import StockController
-from erpnext.stock.doctype.item.item import set_item_default
-from erpnext.stock.get_item_details import get_bin_details, get_conversion_factor
-from erpnext.stock.utils import get_incoming_rate, get_valuation_method
+from psmnext.accounts.party import render_address
+from psmnext.controllers.accounts_controller import get_taxes_and_charges
+from psmnext.controllers.sales_and_purchase_return import get_rate_for_return
+from psmnext.controllers.stock_controller import StockController
+from psmnext.stock.doctype.item.item import set_item_default
+from psmnext.stock.get_item_details import get_bin_details, get_conversion_factor
+from psmnext.stock.utils import get_incoming_rate, get_valuation_method
 
 
 class SellingController(StockController):
@@ -72,7 +72,7 @@ class SellingController(StockController):
 				lead = self.party_name
 
 		if customer:
-			from erpnext.accounts.party import _get_party_details
+			from psmnext.accounts.party import _get_party_details
 
 			party_details = _get_party_details(
 				customer,
@@ -90,7 +90,7 @@ class SellingController(StockController):
 			self.update_if_missing(party_details)
 
 		elif lead:
-			from erpnext.crm.doctype.lead.lead import get_lead_details
+			from psmnext.crm.doctype.lead.lead import get_lead_details
 
 			self.update_if_missing(
 				get_lead_details(
@@ -777,7 +777,7 @@ class SellingController(StockController):
 
 	def validate_items(self):
 		# validate items to see if they have is_sales_item enabled
-		from erpnext.controllers.buying_controller import validate_item_type
+		from psmnext.controllers.buying_controller import validate_item_type
 
 		validate_item_type(self, "is_sales_item", "sales")
 
@@ -790,7 +790,7 @@ def set_default_income_account_for_item(obj):
 
 
 def get_serial_and_batch_bundle(child, parent):
-	from erpnext.stock.serial_batch_bundle import SerialBatchCreation
+	from psmnext.stock.serial_batch_bundle import SerialBatchCreation
 
 	if child.get("use_serial_batch_fields"):
 		return

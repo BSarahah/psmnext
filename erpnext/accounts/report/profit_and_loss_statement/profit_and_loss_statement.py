@@ -6,7 +6,7 @@ import frappe
 from frappe import _
 from frappe.utils import flt
 
-from erpnext.accounts.report.financial_statements import (
+from psmnext.accounts.report.financial_statements import (
 	compute_growth_view_data,
 	compute_margin_view_data,
 	get_columns,

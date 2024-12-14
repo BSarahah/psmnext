@@ -68,4 +68,4 @@ frappe.query_reports["Purchase Register"] = {
 	],
 };
 
-erpnext.utils.add_dimensions("Purchase Register", 7);
+psmnext.utils.add_dimensions("Purchase Register", 7);

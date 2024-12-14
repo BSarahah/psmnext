@@ -50,7 +50,7 @@ frappe.listview_settings["Sales Order"] = {
 		}
 	},
 	onload: function (listview) {
-		var method = "erpnext.selling.doctype.sales_order.sales_order.close_or_unclose_sales_orders";
+		var method = "psmnext.selling.doctype.sales_order.sales_order.close_or_unclose_sales_orders";
 
 		listview.page.add_menu_item(__("Close"), function () {
 			listview.call_for_selected_items(method, { status: "Closed" });
@@ -61,15 +61,15 @@ frappe.listview_settings["Sales Order"] = {
 		});
 
 		listview.page.add_action_item(__("Sales Invoice"), () => {
-			erpnext.bulk_transaction_processing.create(listview, "Sales Order", "Sales Invoice");
+			psmnext.bulk_transaction_processing.create(listview, "Sales Order", "Sales Invoice");
 		});
 
 		listview.page.add_action_item(__("Delivery Note"), () => {
-			erpnext.bulk_transaction_processing.create(listview, "Sales Order", "Delivery Note");
+			psmnext.bulk_transaction_processing.create(listview, "Sales Order", "Delivery Note");
 		});
 
 		listview.page.add_action_item(__("Advance Payment"), () => {
-			erpnext.bulk_transaction_processing.create(listview, "Sales Order", "Payment Entry");
+			psmnext.bulk_transaction_processing.create(listview, "Sales Order", "Payment Entry");
 		});
 	},
 };

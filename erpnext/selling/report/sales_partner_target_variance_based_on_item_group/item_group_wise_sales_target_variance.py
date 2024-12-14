@@ -5,11 +5,11 @@
 import frappe
 from frappe import _
 
-from erpnext.accounts.doctype.monthly_distribution.monthly_distribution import (
+from psmnext.accounts.doctype.monthly_distribution.monthly_distribution import (
 	get_periodwise_distribution_data,
 )
-from erpnext.accounts.report.financial_statements import get_period_list
-from erpnext.accounts.utils import get_fiscal_year
+from psmnext.accounts.report.financial_statements import get_period_list
+from psmnext.accounts.utils import get_fiscal_year
 
 
 def get_data_column(filters, partner_doctype):

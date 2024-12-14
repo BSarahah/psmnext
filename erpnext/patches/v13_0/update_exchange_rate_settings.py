@@ -1,6 +1,6 @@
 import frappe
 
-from erpnext.setup.install import setup_currency_exchange
+from psmnext.setup.install import setup_currency_exchange
 
 
 def execute():

@@ -6,9 +6,9 @@ import unittest
 import frappe
 from frappe.utils import now
 
-from erpnext.assets.doctype.asset.test_asset import create_asset_data
-from erpnext.setup.doctype.employee.test_employee import make_employee
-from erpnext.stock.doctype.purchase_receipt.test_purchase_receipt import make_purchase_receipt
+from psmnext.assets.doctype.asset.test_asset import create_asset_data
+from psmnext.setup.doctype.employee.test_employee import make_employee
+from psmnext.stock.doctype.purchase_receipt.test_purchase_receipt import make_purchase_receipt
 
 
 class TestAssetMovement(unittest.TestCase):

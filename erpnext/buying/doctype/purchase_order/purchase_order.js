@@ -1,14 +1,14 @@
 // Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and Contributors
 // License: GNU General Public License v3. See license.txt
 
-frappe.provide("erpnext.buying");
-frappe.provide("erpnext.accounts.dimensions");
+frappe.provide("psmnext.buying");
+frappe.provide("psmnext.accounts.dimensions");
 
 cur_frm.cscript.tax_table = "Purchase Taxes and Charges";
 
-erpnext.accounts.taxes.setup_tax_filters("Purchase Taxes and Charges");
-erpnext.accounts.taxes.setup_tax_validations("Purchase Order");
-erpnext.buying.setup_buying_controller();
+psmnext.accounts.taxes.setup_tax_filters("Purchase Taxes and Charges");
+psmnext.accounts.taxes.setup_tax_validations("Purchase Order");
+psmnext.buying.setup_buying_controller();
 
 frappe.ui.form.on("Purchase Order", {
 	setup: function (frm) {
@@ -31,7 +31,7 @@ frappe.ui.form.on("Purchase Order", {
 
 		frm.set_query("expense_account", "items", function () {
 			return {
-				query: "erpnext.controllers.queries.get_expense_account",
+				query: "psmnext.controllers.queries.get_expense_account",
 				filters: { company: frm.doc.company },
 			};
 		});
@@ -48,7 +48,7 @@ frappe.ui.form.on("Purchase Order", {
 	},
 
 	company: function (frm) {
-		erpnext.accounts.dimensions.update_dimension(frm, frm.doctype);
+		psmnext.accounts.dimensions.update_dimension(frm, frm.doctype);
 	},
 
 	refresh: function (frm) {
@@ -71,9 +71,9 @@ frappe.ui.form.on("Purchase Order", {
 
 		if (frm.doc.__onload && frm.doc.__onload.load_after_mapping) return;
 
-		erpnext.utils.get_party_details(
+		psmnext.utils.get_party_details(
 			frm,
-			"erpnext.accounts.party.get_party_details",
+			"psmnext.accounts.party.get_party_details",
 			{
 				posting_date: frm.doc.transaction_date,
 				bill_date: frm.doc.bill_date,
@@ -106,7 +106,7 @@ frappe.ui.form.on("Purchase Order", {
 				__("Return of Components"),
 				() => {
 					frm.call({
-						method: "erpnext.controllers.subcontracting_controller.get_materials_from_supplier",
+						method: "psmnext.controllers.subcontracting_controller.get_materials_from_supplier",
 						freeze: true,
 						freeze_message: __("Creating Stock Entry"),
 						args: {
@@ -142,8 +142,8 @@ frappe.ui.form.on("Purchase Order", {
 			}
 		}
 
-		erpnext.queries.setup_queries(frm, "Warehouse", function () {
-			return erpnext.queries.warehouse(frm.doc);
+		psmnext.queries.setup_queries(frm, "Warehouse", function () {
+			return psmnext.queries.warehouse(frm.doc);
 		});
 
 		// On cancel and amending a purchase order with advance payment, reset advance paid amount
@@ -162,7 +162,7 @@ frappe.ui.form.on("Purchase Order", {
 
 	get_subcontracting_boms_for_finished_goods: function (fg_item) {
 		return frappe.call({
-			method: "erpnext.subcontracting.doctype.subcontracting_bom.subcontracting_bom.get_subcontracting_boms_for_finished_goods",
+			method: "psmnext.subcontracting.doctype.subcontracting_bom.subcontracting_bom.get_subcontracting_boms_for_finished_goods",
 			args: {
 				fg_items: fg_item,
 			},
@@ -171,7 +171,7 @@ frappe.ui.form.on("Purchase Order", {
 
 	get_subcontracting_boms_for_service_item: function (service_item) {
 		return frappe.call({
-			method: "erpnext.subcontracting.doctype.subcontracting_bom.subcontracting_bom.get_subcontracting_boms_for_service_item",
+			method: "psmnext.subcontracting.doctype.subcontracting_bom.subcontracting_bom.get_subcontracting_boms_for_service_item",
 			args: {
 				service_item: service_item,
 			},
@@ -184,7 +184,7 @@ frappe.ui.form.on("Purchase Order Item", {
 		var row = locals[cdt][cdn];
 		if (row.schedule_date) {
 			if (!frm.doc.schedule_date) {
-				erpnext.utils.copy_value_in_all_rows(frm.doc, cdt, cdn, "items", "schedule_date");
+				psmnext.utils.copy_value_in_all_rows(frm.doc, cdt, cdn, "items", "schedule_date");
 			} else {
 				set_schedule_date(frm);
 			}
@@ -284,8 +284,8 @@ frappe.ui.form.on("Purchase Order Item", {
 	},
 });
 
-erpnext.buying.PurchaseOrderController = class PurchaseOrderController extends (
-	erpnext.buying.BuyingController
+psmnext.buying.PurchaseOrderController = class PurchaseOrderController extends (
+	psmnext.buying.BuyingController
 ) {
 	setup() {
 		this.frm.custom_make_buttons = {
@@ -334,7 +334,7 @@ erpnext.buying.PurchaseOrderController = class PurchaseOrderController extends (
 				) {
 					if (!this.frm.doc.__onload || this.frm.doc.__onload.can_update_items) {
 						this.frm.add_custom_button(__("Update Items"), () => {
-							erpnext.utils.update_child_items({
+							psmnext.utils.update_child_items({
 								frm: this.frm,
 								child_docname: "items",
 								child_doctype: "Purchase Order Detail",
@@ -462,8 +462,8 @@ erpnext.buying.PurchaseOrderController = class PurchaseOrderController extends (
 	}
 
 	get_items_from_open_material_requests() {
-		erpnext.utils.map_current_doc({
-			method: "erpnext.stock.doctype.material_request.material_request.make_purchase_order_based_on_supplier",
+		psmnext.utils.map_current_doc({
+			method: "psmnext.stock.doctype.material_request.material_request.make_purchase_order_based_on_supplier",
 			args: {
 				supplier: this.frm.doc.supplier,
 			},
@@ -478,7 +478,7 @@ erpnext.buying.PurchaseOrderController = class PurchaseOrderController extends (
 				supplier: this.frm.doc.supplier,
 			},
 			get_query_method:
-				"erpnext.stock.doctype.material_request.material_request.get_material_requests_based_on_supplier",
+				"psmnext.stock.doctype.material_request.material_request.get_material_requests_based_on_supplier",
 		});
 	}
 
@@ -492,7 +492,7 @@ erpnext.buying.PurchaseOrderController = class PurchaseOrderController extends (
 
 	make_stock_entry() {
 		frappe.call({
-			method: "erpnext.controllers.subcontracting_controller.make_rm_stock_entry",
+			method: "psmnext.controllers.subcontracting_controller.make_rm_stock_entry",
 			args: {
 				subcontract_order: cur_frm.doc.name,
 				order_doctype: cur_frm.doc.doctype,
@@ -506,14 +506,14 @@ erpnext.buying.PurchaseOrderController = class PurchaseOrderController extends (
 
 	make_inter_company_order(frm) {
 		frappe.model.open_mapped_doc({
-			method: "erpnext.buying.doctype.purchase_order.purchase_order.make_inter_company_sales_order",
+			method: "psmnext.buying.doctype.purchase_order.purchase_order.make_inter_company_sales_order",
 			frm: frm,
 		});
 	}
 
 	make_purchase_receipt() {
 		frappe.model.open_mapped_doc({
-			method: "erpnext.buying.doctype.purchase_order.purchase_order.make_purchase_receipt",
+			method: "psmnext.buying.doctype.purchase_order.purchase_order.make_purchase_receipt",
 			frm: cur_frm,
 			freeze_message: __("Creating Purchase Receipt ..."),
 		});
@@ -521,14 +521,14 @@ erpnext.buying.PurchaseOrderController = class PurchaseOrderController extends (
 
 	make_purchase_invoice() {
 		frappe.model.open_mapped_doc({
-			method: "erpnext.buying.doctype.purchase_order.purchase_order.make_purchase_invoice",
+			method: "psmnext.buying.doctype.purchase_order.purchase_order.make_purchase_invoice",
 			frm: cur_frm,
 		});
 	}
 
 	make_subcontracting_order() {
 		frappe.model.open_mapped_doc({
-			method: "erpnext.buying.doctype.purchase_order.purchase_order.make_subcontracting_order",
+			method: "psmnext.buying.doctype.purchase_order.purchase_order.make_subcontracting_order",
 			frm: cur_frm,
 			freeze_message: __("Creating Subcontracting Order ..."),
 		});
@@ -539,8 +539,8 @@ erpnext.buying.PurchaseOrderController = class PurchaseOrderController extends (
 		this.frm.add_custom_button(
 			__("Material Request"),
 			function () {
-				erpnext.utils.map_current_doc({
-					method: "erpnext.stock.doctype.material_request.material_request.make_purchase_order",
+				psmnext.utils.map_current_doc({
+					method: "psmnext.stock.doctype.material_request.material_request.make_purchase_order",
 					source_doctype: "Material Request",
 					target: me.frm,
 					setters: {
@@ -564,8 +564,8 @@ erpnext.buying.PurchaseOrderController = class PurchaseOrderController extends (
 		this.frm.add_custom_button(
 			__("Supplier Quotation"),
 			function () {
-				erpnext.utils.map_current_doc({
-					method: "erpnext.buying.doctype.supplier_quotation.supplier_quotation.make_purchase_order",
+				psmnext.utils.map_current_doc({
+					method: "psmnext.buying.doctype.supplier_quotation.supplier_quotation.make_purchase_order",
 					source_doctype: "Supplier Quotation",
 					target: me.frm,
 					setters: {
@@ -606,7 +606,7 @@ erpnext.buying.PurchaseOrderController = class PurchaseOrderController extends (
 					}
 				}
 				frappe.call({
-					method: "erpnext.buying.utils.get_linked_material_requests",
+					method: "psmnext.buying.utils.get_linked_material_requests",
 					args: {
 						items: my_items,
 					},
@@ -749,11 +749,11 @@ erpnext.buying.PurchaseOrderController = class PurchaseOrderController extends (
 };
 
 // for backward compatibility: combine new and previous states
-extend_cscript(cur_frm.cscript, new erpnext.buying.PurchaseOrderController({ frm: cur_frm }));
+extend_cscript(cur_frm.cscript, new psmnext.buying.PurchaseOrderController({ frm: cur_frm }));
 
 cur_frm.cscript.update_status = function (label, status) {
 	frappe.call({
-		method: "erpnext.buying.doctype.purchase_order.purchase_order.update_status",
+		method: "psmnext.buying.doctype.purchase_order.purchase_order.update_status",
 		args: { status: status, name: cur_frm.doc.name },
 		callback: function (r) {
 			cur_frm.set_value("status", status);
@@ -784,7 +784,7 @@ if (cur_frm.doc.is_old_subcontracting_flow) {
 
 function set_schedule_date(frm) {
 	if (frm.doc.schedule_date) {
-		erpnext.utils.copy_value_in_all_rows(
+		psmnext.utils.copy_value_in_all_rows(
 			frm.doc,
 			frm.doc.doctype,
 			frm.doc.name,
@@ -794,10 +794,10 @@ function set_schedule_date(frm) {
 	}
 }
 
-frappe.provide("erpnext.buying");
+frappe.provide("psmnext.buying");
 
 frappe.ui.form.on("Purchase Order", "is_subcontracted", function (frm) {
 	if (frm.doc.is_old_subcontracting_flow) {
-		erpnext.buying.get_default_bom(frm);
+		psmnext.buying.get_default_bom(frm);
 	}
 });

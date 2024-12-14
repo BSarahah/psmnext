@@ -4,9 +4,9 @@
 import frappe
 from frappe.tests.utils import FrappeTestCase
 
-from erpnext.selling.doctype.sales_order.test_sales_order import make_sales_order
-from erpnext.stock.doctype.item.test_item import make_item
-from erpnext.stock.report.item_shortage_report.item_shortage_report import (
+from psmnext.selling.doctype.sales_order.test_sales_order import make_sales_order
+from psmnext.stock.doctype.item.test_item import make_item
+from psmnext.stock.report.item_shortage_report.item_shortage_report import (
 	execute as item_shortage_report,
 )
 

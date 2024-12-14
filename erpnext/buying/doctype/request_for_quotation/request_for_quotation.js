@@ -3,7 +3,7 @@
 
 cur_frm.add_fetch("contact", "email_id", "email_id");
 
-erpnext.buying.setup_buying_controller();
+psmnext.buying.setup_buying_controller();
 
 frappe.ui.form.on("Request for Quotation", {
 	setup: function (frm) {
@@ -53,7 +53,7 @@ frappe.ui.form.on("Request for Quotation", {
 				__("Send Emails to Suppliers"),
 				function () {
 					frappe.call({
-						method: "erpnext.buying.doctype.request_for_quotation.request_for_quotation.send_supplier_emails",
+						method: "psmnext.buying.doctype.request_for_quotation.request_for_quotation.send_supplier_emails",
 						freeze: true,
 						args: {
 							rfq_name: frm.doc.name,
@@ -131,7 +131,7 @@ frappe.ui.form.on("Request for Quotation", {
 						(data) => {
 							var w = window.open(
 								frappe.urllib.get_full_url(
-									"/api/method/erpnext.buying.doctype.request_for_quotation.request_for_quotation.get_pdf?" +
+									"/api/method/psmnext.buying.doctype.request_for_quotation.request_for_quotation.get_pdf?" +
 										new URLSearchParams({
 											name: frm.doc.name,
 											supplier: data.supplier,
@@ -191,7 +191,7 @@ frappe.ui.form.on("Request for Quotation", {
 
 				return frappe.call({
 					type: "GET",
-					method: "erpnext.buying.doctype.request_for_quotation.request_for_quotation.make_supplier_quotation_from_rfq",
+					method: "psmnext.buying.doctype.request_for_quotation.request_for_quotation.make_supplier_quotation_from_rfq",
 					args: {
 						source_name: doc.name,
 						for_supplier: args.supplier,
@@ -291,7 +291,7 @@ frappe.ui.form.on("Request for Quotation Supplier", {
 	supplier: function (frm, cdt, cdn) {
 		var d = locals[cdt][cdn];
 		frappe.call({
-			method: "erpnext.accounts.party.get_party_details",
+			method: "psmnext.accounts.party.get_party_details",
 			args: {
 				party: d.supplier,
 				party_type: "Supplier",
@@ -306,8 +306,8 @@ frappe.ui.form.on("Request for Quotation Supplier", {
 	},
 });
 
-erpnext.buying.RequestforQuotationController = class RequestforQuotationController extends (
-	erpnext.buying.BuyingController
+psmnext.buying.RequestforQuotationController = class RequestforQuotationController extends (
+	psmnext.buying.BuyingController
 ) {
 	refresh() {
 		var me = this;
@@ -316,8 +316,8 @@ erpnext.buying.RequestforQuotationController = class RequestforQuotationControll
 			this.frm.add_custom_button(
 				__("Material Request"),
 				function () {
-					erpnext.utils.map_current_doc({
-						method: "erpnext.stock.doctype.material_request.material_request.make_request_for_quotation",
+					psmnext.utils.map_current_doc({
+						method: "psmnext.stock.doctype.material_request.material_request.make_request_for_quotation",
 						source_doctype: "Material Request",
 						target: me.frm,
 						setters: {
@@ -340,8 +340,8 @@ erpnext.buying.RequestforQuotationController = class RequestforQuotationControll
 			this.frm.add_custom_button(
 				__("Opportunity"),
 				function () {
-					erpnext.utils.map_current_doc({
-						method: "erpnext.crm.doctype.opportunity.opportunity.make_request_for_quotation",
+					psmnext.utils.map_current_doc({
+						method: "psmnext.crm.doctype.opportunity.opportunity.make_request_for_quotation",
 						source_doctype: "Opportunity",
 						target: me.frm,
 						setters: {
@@ -380,8 +380,8 @@ erpnext.buying.RequestforQuotationController = class RequestforQuotationControll
 							if (!args) return;
 							dialog.hide();
 
-							erpnext.utils.map_current_doc({
-								method: "erpnext.buying.doctype.request_for_quotation.request_for_quotation.get_item_from_material_requests_based_on_supplier",
+							psmnext.utils.map_current_doc({
+								method: "psmnext.buying.doctype.request_for_quotation.request_for_quotation.get_item_from_material_requests_based_on_supplier",
 								source_name: args.supplier,
 								target: me.frm,
 								setters: {
@@ -407,7 +407,7 @@ erpnext.buying.RequestforQuotationController = class RequestforQuotationControll
 			this.frm.add_custom_button(
 				__("Link to Material Requests"),
 				function () {
-					erpnext.buying.link_to_mrs(me.frm);
+					psmnext.buying.link_to_mrs(me.frm);
 				},
 				__("Tools")
 			);
@@ -446,7 +446,7 @@ erpnext.buying.RequestforQuotationController = class RequestforQuotationControll
 						if (dialog.get_value("search_type") == "Tag") {
 							frappe
 								.call({
-									method: "erpnext.buying.doctype.request_for_quotation.request_for_quotation.get_supplier_tag",
+									method: "psmnext.buying.doctype.request_for_quotation.request_for_quotation.get_supplier_tag",
 								})
 								.then((r) => {
 									dialog.set_df_property("tag", "options", r.message);
@@ -538,4 +538,4 @@ erpnext.buying.RequestforQuotationController = class RequestforQuotationControll
 };
 
 // for backward compatibility: combine new and previous states
-extend_cscript(cur_frm.cscript, new erpnext.buying.RequestforQuotationController({ frm: cur_frm }));
+extend_cscript(cur_frm.cscript, new psmnext.buying.RequestforQuotationController({ frm: cur_frm }));

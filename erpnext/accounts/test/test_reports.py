@@ -1,6 +1,6 @@
 import unittest
 
-from erpnext.tests.utils import ReportFilters, ReportName, execute_script_report
+from psmnext.tests.utils import ReportFilters, ReportName, execute_script_report
 
 DEFAULT_FILTERS = {
 	"company": "_Test Company",

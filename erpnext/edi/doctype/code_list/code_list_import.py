@@ -90,7 +90,7 @@ def process_genericode_import(
 	description_column: str | None = None,
 	filters: str | None = None,
 ):
-	from erpnext.edi.doctype.common_code.common_code import import_genericode
+	from psmnext.edi.doctype.common_code.common_code import import_genericode
 
 	column_map = {"code": code_column, "title": title_column, "description": description_column}
 

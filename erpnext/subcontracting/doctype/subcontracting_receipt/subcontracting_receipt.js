@@ -1,9 +1,9 @@
 // Copyright (c) 2022, Frappe Technologies Pvt. Ltd. and contributors
 // For license information, please see license.txt
 
-frappe.provide("erpnext.buying");
+frappe.provide("psmnext.buying");
 
-erpnext.landed_cost_taxes_and_charges.setup_triggers("Subcontracting Receipt");
+psmnext.landed_cost_taxes_and_charges.setup_triggers("Subcontracting Receipt");
 
 frappe.ui.form.on("Subcontracting Receipt", {
 	setup: (frm) => {
@@ -67,7 +67,7 @@ frappe.ui.form.on("Subcontracting Receipt", {
 					__("Purchase Receipt"),
 					() => {
 						frappe.model.open_mapped_doc({
-							method: "erpnext.subcontracting.doctype.subcontracting_receipt.subcontracting_receipt.make_purchase_receipt",
+							method: "psmnext.subcontracting.doctype.subcontracting_receipt.subcontracting_receipt.make_purchase_receipt",
 							frm: frm,
 							freeze: true,
 							freeze_message: __("Creating Purchase Receipt ..."),
@@ -83,7 +83,7 @@ frappe.ui.form.on("Subcontracting Receipt", {
 				__("Subcontract Return"),
 				() => {
 					frappe.model.open_mapped_doc({
-						method: "erpnext.subcontracting.doctype.subcontracting_receipt.subcontracting_receipt.make_subcontract_return",
+						method: "psmnext.subcontracting.doctype.subcontracting_receipt.subcontracting_receipt.make_subcontract_return",
 						frm: frm,
 					});
 				},
@@ -103,8 +103,8 @@ frappe.ui.form.on("Subcontracting Receipt", {
 						});
 					}
 
-					erpnext.utils.map_current_doc({
-						method: "erpnext.subcontracting.doctype.subcontracting_order.subcontracting_order.make_subcontracting_receipt",
+					psmnext.utils.map_current_doc({
+						method: "psmnext.subcontracting.doctype.subcontracting_order.subcontracting_order.make_subcontracting_receipt",
 						source_doctype: "Subcontracting Order",
 						target: frm,
 						setters: {
@@ -167,13 +167,13 @@ frappe.ui.form.on("Subcontracting Receipt", {
 			};
 		});
 
-		frm.set_query("contact_person", erpnext.queries.contact_query);
-		frm.set_query("supplier_address", erpnext.queries.address_query);
+		frm.set_query("contact_person", psmnext.queries.contact_query);
+		frm.set_query("supplier_address", psmnext.queries.address_query);
 
-		frm.set_query("billing_address", erpnext.queries.company_address_query);
+		frm.set_query("billing_address", psmnext.queries.company_address_query);
 
 		frm.set_query("shipping_address", () => {
-			return erpnext.queries.company_address_query(frm.doc);
+			return psmnext.queries.company_address_query(frm.doc);
 		});
 
 		frm.set_query("rejected_warehouse", () => {
@@ -226,7 +226,7 @@ frappe.ui.form.on("Subcontracting Receipt", {
 
 		frm.set_query("expense_account", "items", () => {
 			return {
-				query: "erpnext.controllers.queries.get_expense_account",
+				query: "psmnext.controllers.queries.get_expense_account",
 				filters: { company: frm.doc.company },
 			};
 		});
@@ -256,7 +256,7 @@ frappe.ui.form.on("Subcontracting Receipt", {
 			};
 
 			return {
-				query: "erpnext.controllers.queries.get_batch_no",
+				query: "psmnext.controllers.queries.get_batch_no",
 				filters: filters,
 			};
 		});
@@ -288,7 +288,7 @@ frappe.ui.form.on("Subcontracting Receipt", {
 
 	setup_quality_inspection: (frm) => {
 		if (!frm.is_new() && frm.doc.docstatus === 0 && !frm.doc.is_return) {
-			let transaction_controller = new erpnext.TransactionController({ frm: frm });
+			let transaction_controller = new psmnext.TransactionController({ frm: frm });
 			transaction_controller.setup_quality_inspection();
 		}
 	},
@@ -392,7 +392,7 @@ frappe.ui.form.on("Subcontracting Receipt Item", {
 				item.type_of_transaction = item.qty > 0 ? "Inward" : "Outward";
 				item.is_rejected = false;
 
-				new erpnext.SerialBatchPackageSelector(frm, item, (r) => {
+				new psmnext.SerialBatchPackageSelector(frm, item, (r) => {
 					if (r) {
 						let qty = Math.abs(r.total_qty);
 						if (frm.doc.is_return) {
@@ -426,7 +426,7 @@ frappe.ui.form.on("Subcontracting Receipt Item", {
 				item.type_of_transaction = item.rejected_qty > 0 ? "Inward" : "Outward";
 				item.is_rejected = true;
 
-				new erpnext.SerialBatchPackageSelector(frm, item, (r) => {
+				new psmnext.SerialBatchPackageSelector(frm, item, (r) => {
 					if (r) {
 						let qty = Math.abs(r.total_qty);
 						if (frm.doc.is_return) {
@@ -470,7 +470,7 @@ frappe.ui.form.on("Subcontracting Receipt Supplied Item", {
 				item.type_of_transaction = item.qty > 0 ? "Outward" : "Inward";
 				item.is_rejected = false;
 
-				new erpnext.SerialBatchPackageSelector(frm, item, (r) => {
+				new psmnext.SerialBatchPackageSelector(frm, item, (r) => {
 					if (r) {
 						let qty = Math.abs(r.total_qty);
 						if (frm.doc.is_return) {
@@ -493,7 +493,7 @@ frappe.ui.form.on("Subcontracting Receipt Supplied Item", {
 });
 
 let set_warehouse_in_children = (child_table, warehouse_field, warehouse) => {
-	let transaction_controller = new erpnext.TransactionController();
+	let transaction_controller = new psmnext.TransactionController();
 	transaction_controller.autofill_warehouse(child_table, warehouse_field, warehouse);
 };
 

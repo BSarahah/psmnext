@@ -1,13 +1,13 @@
-frappe.provide("erpnext.edi");
+frappe.provide("psmnext.edi");
 
-erpnext.edi.import_genericode = function (listview_or_form) {
+psmnext.edi.import_genericode = function (listview_or_form) {
 	let doctype = "Code List";
 	let docname = undefined;
 	if (listview_or_form.doc !== undefined) {
 		docname = listview_or_form.doc.name;
 	}
 	new frappe.ui.FileUploader({
-		method: "erpnext.edi.doctype.code_list.code_list_import.import_genericode",
+		method: "psmnext.edi.doctype.code_list.code_list_import.import_genericode",
 		doctype: doctype,
 		docname: docname,
 		allow_toggle_private: false,
@@ -118,7 +118,7 @@ function show_column_selection_dialog(context) {
 				}
 			}
 			frappe
-				.xcall("erpnext.edi.doctype.code_list.code_list_import.process_genericode_import", {
+				.xcall("psmnext.edi.doctype.code_list.code_list_import.process_genericode_import", {
 					code_list_name: context.code_list,
 					file_name: context.file,
 					code_column: values.code_column,
